@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2024 WangBin <wbsecg1 at gmail.com>
+ * Copyright (c) 2023-2026 WangBin <wbsecg1 at gmail.com>
  */
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -93,8 +93,8 @@ public class FvpPlugin implements FlutterPlugin, MethodCallHandler {
         sp.setCallback(
                 new TextureRegistry.SurfaceProducer.Callback() {
                   @Override
-                  public void onSurfaceCreated() {
-                    Log.d("FvpPlugin", "SurfaceProducer.onSurfaceCreated for textureId " + texId);
+                  public void onSurfaceAvailable() {
+                    Log.d("FvpPlugin", "SurfaceProducer.onSurfaceAvailable for textureId " + texId);
                     final Surface newSurface = sp.getSurface();
                     surfaces.put(texId, newSurface);
                     // will do nothing if same surface
@@ -102,8 +102,8 @@ public class FvpPlugin implements FlutterPlugin, MethodCallHandler {
                   }
 
                   @Override
-                  public void onSurfaceDestroyed() {
-                    Log.d("FvpPlugin", "SurfaceProducer.onSurfaceDestroyed for textureId " + texId);
+                  public void onSurfaceCleanup() {
+                    Log.d("FvpPlugin", "SurfaceProducer.onSurfaceCleanup for textureId " + texId);
                     textures.remove(texId);
                     nativeSetSurface(handle, texId, null, 0, 0, tunnel);
                   }
@@ -154,9 +154,9 @@ public class FvpPlugin implements FlutterPlugin, MethodCallHandler {
 
   static {
     try {
-        System.loadLibrary("fvp_plugin");
+        System.loadLibrary("fvp");
     } catch (UnsatisfiedLinkError e) {
-        Log.w("FvpPlugin", "static initializer: loadLibrary fvp_plugin error: " + e);
+        Log.w("FvpPlugin", "static initializer: loadLibrary fvp error: " + e);
     }
   }
 }
